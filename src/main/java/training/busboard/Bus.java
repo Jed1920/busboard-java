@@ -16,13 +16,14 @@ public class Bus {
 
     @Override
     public String toString () {
-        String print = String.format("| %-5s | %-25s | %-5d | %-20s", lineName, destinationName, timeToStation, expectedArrival);
+        String print = String.format("| %-5s | %-25s | %-2d mins | %-20s", lineName, destinationName, (timeToStation/60), expectedArrival);
         return print;
     }
 
     public String getId() {
         return id;
     }
+
     public String getLineName() {
         return lineName;
     }
