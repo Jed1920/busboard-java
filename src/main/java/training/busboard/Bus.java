@@ -33,7 +33,7 @@ public class Bus {
     }
 
     public Integer getTimeToStation() {
-        return timeToStation;
+        return (timeToStation/60);
     }
 
     public Date getExpectedArrival() {

@@ -1,16 +1,13 @@
 package training.busboard;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class BusModel {
-    private List<String> busStops = new ArrayList<>();
     private final String postCode;
-    private String printout;
+    private List<List<Bus>> stopBuses = new ArrayList<>();
+    private Map<String, List<Bus>> busStops = new HashMap<String,List<Bus>>();
 
-    public BusModel(String postCode){
+    public BusModel(String postCode) {
         this.postCode = postCode;
 
         PostcodeURL coordinates = new PostcodeURL(postCode);
@@ -21,22 +18,28 @@ public class BusModel {
             StopPoints stop = nearbyStopList.getStopPoints().get(x);
 
             List<Bus> busList = tflAPI.tflURL_bus(stop);
+            List<Bus> busListSorted = new ArrayList<>();
+            for (int i = 1; i <= 4 && i < (busList.size()); i++) {
+                busListSorted.add(busList.get(i));
+            }
 
             Comparator<Bus> compareByTime = (Bus o1, Bus o2) -> o1.getTimeToStation().compareTo(o2.getTimeToStation());
             Collections.sort(busList, compareByTime);
-            busStops.add(String.format("| %-30s | Distance %3.0f m|",stop.getCommonName(), stop.getDistance()));
 
-            printout = String.format("| %-30s | Distance %3.0f m|",stop.getCommonName(), stop.getDistance());
-            System.out.println(printout);
-
-            for (int i = 1; i <= 5 && i < (busList.size()); i++) {
-                System.out.println(busList.get(i));
+            busStops.put((String.format(" %-30s | %3.0f m Away", stop.getCommonName(), stop.getDistance())),busList);
+            stopBuses.add(busListSorted);
             }
         }
+
+    public List<List<Bus>> getStopBuses() {
+        return stopBuses;
     }
-    public List<String> getBusStops() { return busStops; }
 
-    public String getPostCode() { return postCode; }
+    public Map<String, List<Bus>> getBusStops() {
+        return busStops;
+    }
 
-    public String getPrintout() { return printout; }
+    public String getPostCode() {
+        return postCode;
+    }
 }

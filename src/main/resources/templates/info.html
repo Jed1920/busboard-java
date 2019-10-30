@@ -34,10 +34,25 @@
                 <p>You entered postcode <span th:text="${busModel.postCode}"></span></p>
             </div>
             <div>
-<!--                Broken no idea what to do with HTML-->
-                <h3 th:each="${busModel.busStops}">
-                    <span th:text="${busModel.busStops}"></span>
-                </h3>
+                <div th:each="stops: ${busModel.busStops}">
+                <h4>
+                    <span th:text="${stops.Key}"></span>
+                </h4>
+                    <table style ="width:75%">
+                        <tr>
+                            <th> Bus Number </th>
+                            <th> Route End </th>
+                            <th> Time to Arrival </th>
+                            <th> Time of Arrival </th>
+                        </tr>
+                        <tr th:each="buses: ${stops.Value}">>
+                            <td> <span th:text="${buses.lineName}"></span> </td>
+                            <td> <span th:text="${buses.destinationName}"></span> </td>
+                            <td> <span th:text="${buses.timeToStation}"></span></td>
+                            <td> <span th:text="${buses.expectedArrival}"></span></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </body>
