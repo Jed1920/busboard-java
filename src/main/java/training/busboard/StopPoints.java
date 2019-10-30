@@ -11,7 +11,7 @@ public class StopPoints {
 
     @Override
     public String toString () {
-        String print = String.format("| %-5s | %-5s |", id, distance);
+        String print = String.format("| %-5s | %-20s | %-5s |", id, commonName, distance);
         return print;
     }
 
@@ -19,9 +19,7 @@ public class StopPoints {
         return id;
     }
 
-    public String getCommonName() {
-        return commonName;
-    }
+    public String getCommonName() { return commonName; }
 
     public Double getDistance() {
         return distance;

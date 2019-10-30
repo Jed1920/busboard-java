@@ -7,12 +7,37 @@
 
     <head>
         <title>Bus Information</title>
+        <style>
+        table,h1,h3 {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        th{
+          border: 2px solid #dddddd;
+          text-align: left;
+          padding: 3px;
+          background-color:tomato;
+          }
+        td{
+          border: 2px solid #dddddd;
+          text-align: left;
+          padding: 3px;
+        }
+        </style>
     </head>
     <body>
         <div layout:fragment="content" class="container body-content">
             <h2>Bus Information</h2>
             <div>
-                <p>You entered postcode <span th:text="${busInfo.postcode}"></span></p>
+                <p>You entered postcode <span th:text="${busModel.postCode}"></span></p>
+            </div>
+            <div>
+<!--                Broken no idea what to do with HTML-->
+                <h3 th:each="${busModel.busStops}">
+                    <span th:text="${busModel.busStops}"></span>
+                </h3>
             </div>
         </div>
     </body>

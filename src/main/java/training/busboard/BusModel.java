@@ -1,20 +1,21 @@
-
 package training.busboard;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-public class Main {
-    public static void main(String args[]) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Welcome to the Bus Stop finder! Input your Postcode to find out the next 5 buses" +
-                " arriving at your nearest stops!");
-        String postCode = input.nextLine();
+public class BusModel {
+    private List<String> busStops = new ArrayList<>();
+    private final String postCode;
+    private String printout;
+
+    public BusModel(String postCode){
+        this.postCode = postCode;
 
         PostcodeURL coordinates = new PostcodeURL(postCode);
         tflURL tflAPI = new tflURL();
         StopPointOverview nearbyStopList = tflAPI.tflURL_busStops(coordinates);
-        List<String> busStops= new ArrayList<>();
-
 
         for (int x = 0; x < 2; x++) {
             StopPoints stop = nearbyStopList.getStopPoints().get(x);
@@ -25,13 +26,17 @@ public class Main {
             Collections.sort(busList, compareByTime);
             busStops.add(String.format("| %-30s | Distance %3.0f m|",stop.getCommonName(), stop.getDistance()));
 
-            String printout = String.format("| %-30s | Distance %3.0f m|",stop.getCommonName(), stop.getDistance());
-            System.out.println(busStops);
+            printout = String.format("| %-30s | Distance %3.0f m|",stop.getCommonName(), stop.getDistance());
+            System.out.println(printout);
 
             for (int i = 1; i <= 5 && i < (busList.size()); i++) {
                 System.out.println(busList.get(i));
             }
         }
-        System.out.println(busStops);
     }
+    public List<String> getBusStops() { return busStops; }
+
+    public String getPostCode() { return postCode; }
+
+    public String getPrintout() { return printout; }
 }
