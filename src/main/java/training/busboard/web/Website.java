@@ -20,18 +20,28 @@ public class Website {
     }
 
     @RequestMapping("/busInfo")
-    ModelAndView busInfo(@RequestParam("postcode") String postcode) {
-        // get the postcode details
+    ModelAndView busInfo(@RequestParam("postcode") String postCode) {
 
-        // then get the stops
+        PostcodeURL coordinates = new PostcodeURL(postCode);
+        tflURL tflAPI = new tflURL();
+        StopPointOverview nearbyStopList = tflAPI.tflURL_busStops(coordinates);
+        Map<String, List<Bus>> busStops = new HashMap<String,List<Bus>>();
 
-        // then get the buses for each stop
+        for (int x = 0; x < 2; x++) {
+            StopPoints stop = nearbyStopList.getStopPoints().get(x);
 
-        // then use that data to build out model
+            List<Bus> busList = tflAPI.tflURL_bus(stop);
+            List<Bus> busListSorted = new ArrayList<>();
 
-        // finally return the model with its view.
+            Comparator<Bus> compareByTime = (Bus o1, Bus o2) -> o1.getTimeToStation().compareTo(o2.getTimeToStation());
+            Collections.sort(busList, compareByTime);
 
-            return new ModelAndView("info", "busModel", new BusModel(postcode));
+            for (int i = 1; i <= 5 && i < (busList.size()); i++) {
+                busListSorted.add(busList.get(i));
+            }
+            busStops.put((String.format(" %-30s | %3.0f m Away", stop.getCommonName(), stop.getDistance())),busListSorted);
+        }
+            return new ModelAndView("info", "busModel", new BusModel(postCode, busStops));
     }
 
     public static void main(String[] args) throws Exception {
